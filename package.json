@@ -1,6 +1,6 @@
 {
   "name": "simple-website-audit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "This is a simple package for testing your websites HTTP responses, analyze your HTML via W3C validations, run AMP validations, search errors via string and look for the redirect path",
   "main": "index.js",
   "scripts": {
