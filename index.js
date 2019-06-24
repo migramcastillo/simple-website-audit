@@ -4,6 +4,7 @@ const getSiteMap = require('./get_sitemap');
 
 // Audits instances
 const auditMaker = require('./audits/');
+const auditMakerSync = require('./audits/audit_sync');
 
 const audit = function(url) {
   return {
@@ -94,6 +95,27 @@ const audit = function(url) {
       });
 
       let result = await auditMaker(this);
+
+      return result;
+    },
+
+    // Audit Fire
+    makeSync: async function() {
+      //Check if sitemap is in use
+      if (this.configuration.usingSitemap) {
+        await this.setUrlsFromSitemap();
+      }
+
+      //Check if URLs is Array
+      if (!Array.isArray(this.urls)) {
+        this.urls = [this.urls];
+      }
+
+      this.urls = this.urls.map(uri => {
+        return sanitizeURL(uri);
+      });
+
+      let result = await auditMakerSync(this);
 
       return result;
     }
