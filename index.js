@@ -1,104 +1,103 @@
 // Functions to work with
-const sanitizeURL = require("./sanitize_url");
-const getSiteMap = require("./get_sitemap");
+const sanitizeURL = require('./sanitize_url');
+const getSiteMap = require('./get_sitemap');
 
 // Audits instances
-const auditMaker = require("./audits/");
+const auditMaker = require('./audits/');
 
-const audit = function(url){
+const audit = function(url) {
+  return {
+    //Additional audits to make, default audit is HTTP if it fails no one of the above will run
+    audits: {
+      regex: false,
+      redirect: false,
+      w3c: false,
+      amp: false,
+      seo: false,
+      lighthouse: false
+    },
+    //Regex to find in the HTML result
+    regex_strings: [],
+    //Domain to attach in the url if set
+    domain: '',
+    // Some others configurations to test
+    configuration: {
+      offsetRegex: 200,
+      maxTime: 5000,
+      maxRedirects: 5,
+      resolveWithFullResponse: true,
+      followAllRedirects: true,
+      ignoreHttpCodes: [],
+      listenHttpCodes: [],
+      usingSitemap: '',
+      fromMobile: false
+    },
+    // URLs to test
+    urls: url,
 
-    return {
-        //Additional audits to make, default audit is HTTP if it fails no one of the above will run
-        audits: {
-            regex: false,
-            redirect: false,
-            w3c: false,
-            amp: false,
-            seo: false,
-            lighthouse: false
-        },
-        //Regex to find in the HTML result
-        regex_strings: [],
-        //Domain to attach in the url if set
-        domain: "",
-        // Some others configurations to test
-        configuration: {
-            offsetRegex: 200,
-            maxTime: 5000,
-            maxRedirects: 5,
-            resolveWithFullResponse: true,
-            followAllRedirects: true,
-            ignoreHttpCodes: [],
-            listenHttpCodes: [],
-            usingSitemap: ""
-        },
-        // URLs to test
-        urls: url,
+    // The report result will be stored here
+    report: [],
 
-        // The report result will be stored here
-        report: [],
+    /* Setters */
+    setAudits: function(newAudits) {
+      this.audits = { ...this.audits, ...newAudits };
+      return this;
+    },
+    setDomain: function(domain) {
+      this.domain = toString(domain);
 
-        /* Setters */
-        setAudits: function(newAudits) {
-            this.audits = { ...this.audits, ...newAudits }
-            return this;
-        },
-        setDomain: function(domain) {
-            this.domain = toString(domain);
+      if (!Array.isArray(this.urls)) {
+        this.urls = [this.urls];
+      }
 
-            if(!Array.isArray(this.urls)){
-                this.urls = [this.urls];
-            }
+      this.urls = this.urls.map(uri => {
+        return sanitizeURL(domain + uri);
+      });
 
-            this.urls = this.urls.map(uri => {
-                return sanitizeURL(domain + uri);
-            });
+      return this;
+    },
+    setConfiguration: function(newConfiguration) {
+      this.configuration = { ...this.configuration, ...newConfiguration };
+      return this;
+    },
+    setRegexStrings: function(newStrings) {
+      this.regex_strings = Array.from(newStrings);
+      return this;
+    },
+    setUrlsFromSitemap: async function() {
+      // Sanitize URL from config
+      const siteUrl = sanitizeURL(this.configuration.usingSitemap);
 
-            return this;
-        },
-        setConfiguration: function(newConfiguration) {
-            this.configuration = { ...this.configuration, ...newConfiguration }
-            return this;
-        },
-        setRegexStrings: function(newStrings) {
-            this.regex_strings = Array.from(newStrings);
-            return this;
-        },
-        setUrlsFromSitemap: async function() {
-            // Sanitize URL from config
-            const siteUrl = sanitizeURL(this.configuration.usingSitemap);
+      // Get sitemap URLs
+      const newUrls = await getSiteMap(siteUrl);
 
-            // Get sitemap URLs
-            const newUrls = await getSiteMap(siteUrl);
+      // Set URLs from Sitemap
+      this.urls = newUrls;
 
-            // Set URLs from Sitemap
-            this.urls = newUrls;
+      return;
+    },
 
-            return;
-        },
+    // Audit Fire
+    make: async function() {
+      //Check if sitemap is in use
+      if (this.configuration.usingSitemap) {
+        await this.setUrlsFromSitemap();
+      }
 
-        // Audit Fire
-        make: async function(){
+      //Check if URLs is Array
+      if (!Array.isArray(this.urls)) {
+        this.urls = [this.urls];
+      }
 
-            //Check if sitemap is in use
-            if(this.configuration.usingSitemap){
-                await this.setUrlsFromSitemap();
-            }
+      this.urls = this.urls.map(uri => {
+        return sanitizeURL(uri);
+      });
 
-            //Check if URLs is Array
-            if(!Array.isArray(this.urls)){
-                this.urls = [this.urls];
-            }
+      let result = await auditMaker(this);
 
-            this.urls = this.urls.map(uri => {
-                return sanitizeURL(uri);
-            });
-
-            let result = await auditMaker(this);
-
-            return result;
-        }
+      return result;
     }
-}
+  };
+};
 
 module.exports = audit;
