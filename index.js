@@ -1,3 +1,5 @@
+'use strict';
+
 // Functions to work with
 const sanitizeURL = require('./sanitize_url');
 const getSiteMap = require('./get_sitemap');
@@ -6,7 +8,7 @@ const getSiteMap = require('./get_sitemap');
 const auditMaker = require('./audits/');
 const auditMakerSync = require('./audits/audit_sync');
 
-const audit = function(url) {
+function auditFunction(url) {
   return {
     //Additional audits to make, default audit is HTTP if it fails no one of the above will run
     audits: {
@@ -40,11 +42,11 @@ const audit = function(url) {
     report: [],
 
     /* Setters */
-    setAudits: function(newAudits) {
+    setAudits: function (newAudits) {
       this.audits = { ...this.audits, ...newAudits };
       return this;
     },
-    setDomain: function(domain) {
+    setDomain: function (domain) {
       this.domain = toString(domain);
 
       if (!Array.isArray(this.urls)) {
@@ -57,15 +59,15 @@ const audit = function(url) {
 
       return this;
     },
-    setConfiguration: function(newConfiguration) {
+    setConfiguration: function (newConfiguration) {
       this.configuration = { ...this.configuration, ...newConfiguration };
       return this;
     },
-    setRegexStrings: function(newStrings) {
+    setRegexStrings: function (newStrings) {
       this.regex_strings = Array.from(newStrings);
       return this;
     },
-    setUrlsFromSitemap: async function() {
+    setUrlsFromSitemap: async function () {
       // Sanitize URL from config
       const siteUrl = sanitizeURL(this.configuration.usingSitemap);
 
@@ -79,7 +81,7 @@ const audit = function(url) {
     },
 
     // Audit Fire
-    make: async function() {
+    make: async function () {
       //Check if sitemap is in use
       if (this.configuration.usingSitemap) {
         await this.setUrlsFromSitemap();
@@ -100,7 +102,7 @@ const audit = function(url) {
     },
 
     // Audit Fire
-    makeSync: async function() {
+    makeSync: async function () {
       //Check if sitemap is in use
       if (this.configuration.usingSitemap) {
         await this.setUrlsFromSitemap();
@@ -122,4 +124,4 @@ const audit = function(url) {
   };
 };
 
-module.exports = audit;
+module.exports = auditFunction;

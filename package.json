@@ -3,8 +3,10 @@
   "version": "1.0.2",
   "description": "This is a simple package for testing your websites HTTP responses, analyze your HTML via W3C validations, run AMP validations, search errors via string and look for the redirect path",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
-    "test": "test.js"
+    "test": "test.js",
+    "typescript": "tsc --project ./test/types/tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -18,20 +20,24 @@
     "w3c",
     "validation",
     "amp",
-    "validation"
+    "lighthouse"
   ],
   "dependencies": {
-    "amphtml-validator": "^1.0.23",
-    "body-parser": "^1.18.3",
-    "html-validator": "^4.0.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2",
+    "amphtml-validator": "^1.0.30",
+    "body-parser": "^1.19.0",
+    "html-validator": "^4.1.1",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5",
     "xml2json": "^0.11.2"
   },
   "author": "Miguel Castillo",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/migramcastillo/simple-website-audit/issues"
   },
-  "homepage": "https://github.com/migramcastillo/simple-website-audit#readme"
+  "homepage": "https://github.com/migramcastillo/simple-website-audit#readme",
+  "devDependencies": {
+    "tap": "^14.10.6",
+    "typescript": "^3.7.5"
+  }
 }
