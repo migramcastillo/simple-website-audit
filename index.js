@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
 // Functions to work with
-const sanitizeURL = require('./sanitize_url');
-const getSiteMap = require('./get_sitemap');
+const sanitizeURL = require("./helpers/sanitize-url");
+const getSiteMap = require("./helpers/get-sitemap");
 
 // Audits instances
-const auditMaker = require('./audits/');
-const auditMakerSync = require('./audits/audit_sync');
+const auditMaker = require("./audits/");
+const auditMakerSync = require("./audits/audit_sync");
 
 function auditFunction(url) {
   return {
@@ -22,7 +22,7 @@ function auditFunction(url) {
     //Regex to find in the HTML result
     regex_strings: [],
     //Domain to attach in the url if set
-    domain: '',
+    domain: "",
     // Some others configurations to test
     configuration: {
       offsetRegex: 200,
@@ -32,7 +32,7 @@ function auditFunction(url) {
       followAllRedirects: true,
       ignoreHttpCodes: [],
       listenHttpCodes: [],
-      usingSitemap: '',
+      usingSitemap: "",
       fromMobile: false
     },
     // URLs to test
@@ -42,11 +42,11 @@ function auditFunction(url) {
     report: [],
 
     /* Setters */
-    setAudits: function (newAudits) {
+    setAudits: function(newAudits) {
       this.audits = { ...this.audits, ...newAudits };
       return this;
     },
-    setDomain: function (domain) {
+    setDomain: function(domain) {
       this.domain = toString(domain);
 
       if (!Array.isArray(this.urls)) {
@@ -59,15 +59,15 @@ function auditFunction(url) {
 
       return this;
     },
-    setConfiguration: function (newConfiguration) {
+    setConfiguration: function(newConfiguration) {
       this.configuration = { ...this.configuration, ...newConfiguration };
       return this;
     },
-    setRegexStrings: function (newStrings) {
+    setRegexStrings: function(newStrings) {
       this.regex_strings = Array.from(newStrings);
       return this;
     },
-    setUrlsFromSitemap: async function () {
+    setUrlsFromSitemap: async function() {
       // Sanitize URL from config
       const siteUrl = sanitizeURL(this.configuration.usingSitemap);
 
@@ -81,7 +81,7 @@ function auditFunction(url) {
     },
 
     // Audit Fire
-    make: async function () {
+    make: async function() {
       //Check if sitemap is in use
       if (this.configuration.usingSitemap) {
         await this.setUrlsFromSitemap();
@@ -102,7 +102,7 @@ function auditFunction(url) {
     },
 
     // Audit Fire
-    makeSync: async function () {
+    makeSync: async function() {
       //Check if sitemap is in use
       if (this.configuration.usingSitemap) {
         await this.setUrlsFromSitemap();
@@ -122,6 +122,6 @@ function auditFunction(url) {
       return result;
     }
   };
-};
+}
 
 module.exports = auditFunction;

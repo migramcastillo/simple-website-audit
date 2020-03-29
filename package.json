@@ -5,7 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "test.js",
+    "test": "tap",
     "typescript": "tsc --project ./test/types/tsconfig.json"
   },
   "repository": {
@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/migramcastillo/simple-website-audit#readme",
   "devDependencies": {
-    "tap": "^14.10.6",
-    "typescript": "^3.7.5"
+    "tap": "^14.10.7",
+    "typescript": "^3.8.3"
   }
 }
