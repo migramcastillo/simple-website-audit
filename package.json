@@ -1,6 +1,6 @@
 {
   "name": "simple-website-audit",
-  "version": "1.0.2",
+  "version": "1.2.0",
   "description": "The simple package API to check the health of your site.",
   "main": "index.js",
   "types": "index.d.ts",
