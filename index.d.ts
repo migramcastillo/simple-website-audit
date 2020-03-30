@@ -1,10 +1,12 @@
 interface auditOptions {
-  regex?: boolean;
+  regex?: Array<RegExp | string>;
   redirect?: boolean;
   w3c?: boolean;
   amp?: boolean;
-  seo?: boolean;
-  lighthouse?: boolean;
+}
+
+interface urlObject extends auditObject {
+  url: string;
 }
 
 interface requestConfigOptions {
@@ -14,9 +16,8 @@ interface requestConfigOptions {
   resolveWithFullResponse?: boolean;
   followAllRedirects?: boolean;
   ignoreHttpCodes?: number[];
-  listenHttpCodes?: number[];
-  usingSitemap?: string;
-  fromMobile?: boolean;
+  sitemapUrl?: string;
+  userAgent?: string;
 }
 
 interface auditConfiguration {
@@ -29,13 +30,35 @@ interface auditConfiguration {
 
 type setAuditFunction = () => auditObject;
 
+interface report {
+  http: {
+    url: string;
+    status: number;
+  };
+  date: Date;
+  redirect?: {
+    statusCode: number;
+    redirectUri: string;
+  }[];
+  regex: string[];
+  amp?: {
+    status: string;
+    errors: any[];
+  };
+}
+
 interface auditObject {
-  configuration: auditConfiguration;
+  audits: auditOptions;
+  configuration: requestConfigOptions;
+  report: report[];
+  urls: Array<string | urlObject>;
   setAudits: (params: auditOptions) => auditObject;
-  setDomain: (domain: string) => auditObject;
-  setConfiguration: (configuration: auditConfiguration) => auditObject;
-  setRegexString: (values: Array<string | RegExp>) => auditObject;
-  setURLsFromSitemap: (url: string) => Promise<auditObject>;
+  addUrls: (urls: string | Array<string | urlObject>) => auditObject;
+  setUrls: (urls: string | Array<string | urlObject>) => auditObject;
+  setUserAgent: (userAgent?) => auditObject;
+  setConfiguration: (configuration: requestConfigOptions) => auditObject;
+  setUrlsFromSitemap: (url: string) => Promise<auditObject>;
+  make: () => Promise<report[]>;
 }
 
 declare const auditFunction: (options?: auditConfiguration) => auditObject;

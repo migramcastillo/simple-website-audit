@@ -1,8 +1,8 @@
-const httpAudit = require('./http_audit');
-const htmlAudit = require('./html_audit');
-const ampAudit = require('./amp_audit');
-const regexAudit = require('./regex_audit');
-const redirectAudit = require('./redirect_audit');
+const httpAudit = require("./http");
+const htmlAudit = require("./w3c");
+const ampAudit = require("./amp");
+const regexAudit = require("./regex");
+const redirectAudit = require("./redirect");
 
 const auditMakerSync = async ({
   audits,

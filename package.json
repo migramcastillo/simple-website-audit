@@ -5,7 +5,8 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "tap",
+    "test": "tap -T",
+    "test:watch": "tap -T -w",
     "typescript": "tsc --project ./test/types/tsconfig.json"
   },
   "repository": {
@@ -30,14 +31,14 @@
     "request-promise": "^4.2.5",
     "xml2json": "^0.11.2"
   },
+  "devDependencies": {
+    "tap": "^14.10.7",
+    "typescript": "^3.8.3"
+  },
   "author": "Miguel Castillo",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/migramcastillo/simple-website-audit/issues"
   },
-  "homepage": "https://github.com/migramcastillo/simple-website-audit#readme",
-  "devDependencies": {
-    "tap": "^14.10.7",
-    "typescript": "^3.8.3"
-  }
+  "homepage": "https://github.com/migramcastillo/simple-website-audit#readme"
 }
