@@ -35,7 +35,11 @@
     "tap": "^14.10.7",
     "typescript": "^3.8.3"
   },
-  "author": "Miguel Castillo",
+  "author": {
+    "name": "Miguel Castillo",
+    "email": "migramcastillo@gmail.com",
+    "url": "https://github.com/migramcastillo"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/migramcastillo/simple-website-audit/issues"
