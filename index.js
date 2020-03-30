@@ -82,7 +82,7 @@ function auditFunction() {
       // Set URLs from Sitemap
       this.urls = newUrls;
 
-      return;
+      return this;
     },
 
     // Audit Fire
